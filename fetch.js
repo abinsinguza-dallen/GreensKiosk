@@ -1,17 +1,23 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-function getproducts(){
-  fetch('localhost:5000/products')
-  .then((response) => response.json())
-  .then((data) => console.log(data));
+const products = document.getElementById("products");
+const fruList = document.getElementById("fruList");
+const vegList = document.getElementById("vegList");
 
+async function getitems(item,element){
+  const response = await fetch("http://localhost:5000/"+item).then((response)=>{
+   return response.json();
+   }).then((data)=>{ data.forEach((grocerry) => {
+     const li = document.createElement("li");
+     li.innerHTML = grocerry["name"].concat("<br/>").concat(grocerry["category"]);
+     element.appendChild(li);
+   });
+ })
 }
-getproducts();
 
-function getfriutList(){
-  fetch('localhost:5000/fruitList')
-  .then((response) => response.json())
-  .then((data) => console.log(data));
-}
-getfriutList();
+//Products
+getitems("products",products);
 
+//fruits
+getitems("products/fruits",fruList);
 
+//vegetables
+getitems("products/vegetables",vegList);
